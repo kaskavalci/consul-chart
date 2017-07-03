@@ -1,0 +1,221 @@
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: consul-server-0
+spec:
+  serviceName: consul-server-0
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        consul-master: "0"
+    spec:
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: consul-server-0
+          image: {{ default "consul:0.8.5" .Values.image | quote}}
+          args:
+            - "agent"
+            - "-advertise={{.Values.master_ip_0}}"
+            - "-bind=0.0.0.0"
+            - "-client=0.0.0.0"
+            - "-bootstrap-expect=3"
+            - "-config-file=/etc/consul/consul_server_config.json"
+            - "-datacenter=dc1"
+            - "-domain=cluster.local"
+            - "-server"
+            - "-ui"
+            - "-rejoin"
+            - "-retry-join={{.Values.master_ip_1 }}"
+            - "-retry-join={{.Values.master_ip_2 }}"
+            - "-log-level=DEBUG"
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          volumeMounts:
+            - name: data
+              mountPath: /consul/data
+            - name: config
+              mountPath: /etc/consul
+          ports:
+            - containerPort: 8500
+              name: ui-port
+            - containerPort: 8400
+              name: alt-port
+            - containerPort: 53
+              name: udp-port
+            - containerPort: 8443
+              name: https-port
+            - containerPort: 8080
+              name: http-port
+            - containerPort: 8301
+              name: serflan
+            - containerPort: 8302
+              name: serfwan
+            - containerPort: 8600
+              name: consuldns
+            - containerPort: 8300
+              name: server
+      volumes:
+        - name: config
+          configMap:
+            name: consul
+        - hostPath:
+            path: /var/local/consul/consul-server-0/data
+          name: data
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: consul-server-1
+spec:
+  serviceName: consul-server-1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        consul-master: "1"
+    spec:
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: consul-server-1
+          image: {{ default "consul:0.8.5" .Values.image | quote}}
+          args:
+            - "agent"
+            - "-advertise={{.Values.master_ip_1}}"
+            - "-bind=0.0.0.0"
+            - "-client=0.0.0.0"
+            - "-bootstrap-expect=3"
+            - "-config-file=/etc/consul/consul_server_config.json"
+            - "-datacenter=dc1"
+            - "-domain=cluster.local"
+            - "-server"
+            - "-ui"
+            - "-rejoin"
+            - "-retry-join={{.Values.master_ip_0 }}"
+            - "-retry-join={{.Values.master_ip_2 }}"
+            - "-log-level=DEBUG"
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          volumeMounts:
+            - name: data
+              mountPath: /consul/data
+            - name: config
+              mountPath: /etc/consul
+          ports:
+            - containerPort: 8500
+              name: ui-port
+            - containerPort: 8400
+              name: alt-port
+            - containerPort: 53
+              name: udp-port
+            - containerPort: 8443
+              name: https-port
+            - containerPort: 8080
+              name: http-port
+            - containerPort: 8301
+              name: serflan
+            - containerPort: 8302
+              name: serfwan
+            - containerPort: 8600
+              name: consuldns
+            - containerPort: 8300
+              name: server
+      volumes:
+        - name: config
+          configMap:
+            name: consul
+        - hostPath:
+            path: /var/local/consul/consul-server-1/data
+          name: data
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: consul-server-2
+spec:
+  serviceName: consul-server-2
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        consul-master: "2"
+    spec:
+      terminationGracePeriodSeconds: 10
+      securityContext:
+        fsGroup: 1000
+      containers:
+        - name: consul-server-2
+          image: {{ default "consul:0.8.5" .Values.image | quote}}
+          args:
+            - "agent"
+            - "-advertise={{.Values.master_ip_2 }}"
+            - "-bind=0.0.0.0"
+            - "-client=0.0.0.0"
+            - "-bootstrap-expect=3"
+            - "-config-file=/etc/consul/consul_server_config.json"
+            - "-datacenter=dc1"
+            - "-domain=cluster.local"
+            - "-server"
+            - "-ui"
+            - "-rejoin"
+            - "-retry-join={{.Values.master_ip_0 }}"
+            - "-retry-join={{.Values.master_ip_1 }}"
+            - "-log-level=DEBUG"
+          env:
+          - name: POD_NAME
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.name
+          - name: NAMESPACE
+            valueFrom:
+              fieldRef:
+                fieldPath: metadata.namespace
+          volumeMounts:
+            - name: data
+              mountPath: /consul/data
+            - name: config
+              mountPath: /etc/consul
+          ports:
+            - containerPort: 8500
+              name: ui-port
+            - containerPort: 8400
+              name: alt-port
+            - containerPort: 53
+              name: udp-port
+            - containerPort: 8443
+              name: https-port
+            - containerPort: 8080
+              name: http-port
+            - containerPort: 8301
+              name: serflan
+            - containerPort: 8302
+              name: serfwan
+            - containerPort: 8600
+              name: consuldns
+            - containerPort: 8300
+              name: server
+      volumes:
+        - name: config
+          configMap:
+            name: consul
+        - hostPath:
+            path: /var/local/consul/consul-server-2/data
+          name: data

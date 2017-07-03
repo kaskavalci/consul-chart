@@ -1,0 +1,169 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-server-0
+  labels:
+    name: consul-server-0
+spec:
+  clusterIP: {{.Values.master_ip_0}}
+  ports:
+    - name: http
+      port: 8500
+      targetPort: 8500
+    - name: https
+      port: 8443
+      targetPort: 8443
+    - name: rpc
+      port: 8400
+      targetPort: 8400
+    - name: serflan-tcp
+      protocol: "TCP"
+      port: 8301
+      targetPort: 8301
+    - name: serflan-udp
+      protocol: "UDP"
+      port: 8301
+      targetPort: 8301
+    - name: serfwan-tcp
+      protocol: "TCP"
+      port: 8302
+      targetPort: 8302
+    - name: serfwan-udp
+      protocol: "UDP"
+      port: 8302
+      targetPort: 8302
+    - name: server
+      port: 8300
+      targetPort: 8300
+    - name: consuldns
+      port: 8600
+      targetPort: 8600
+  selector:
+    component: consul
+    consul-master: "0"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-server-1
+  labels:
+    name: consul-server-1
+spec:
+  clusterIP: {{.Values.master_ip_1}}
+  ports:
+    - name: http
+      port: 8500
+      targetPort: 8500
+    - name: https
+      port: 8443
+      targetPort: 8443
+    - name: rpc
+      port: 8400
+      targetPort: 8400
+    - name: serflan-tcp
+      protocol: "TCP"
+      port: 8301
+      targetPort: 8301
+    - name: serflan-udp
+      protocol: "UDP"
+      port: 8301
+      targetPort: 8301
+    - name: serfwan-tcp
+      protocol: "TCP"
+      port: 8302
+      targetPort: 8302
+    - name: serfwan-udp
+      protocol: "UDP"
+      port: 8302
+      targetPort: 8302
+    - name: server
+      port: 8300
+      targetPort: 8300
+    - name: consuldns
+      port: 8600
+      targetPort: 8600
+  selector:
+    consul-master: "1"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul-server-2
+  labels:
+    name: consul-server-2
+spec:
+  clusterIP: {{.Values.master_ip_2}}
+  ports:
+    - name: http
+      port: 8500
+      targetPort: 8500
+    - name: https
+      port: 8443
+      targetPort: 8443
+    - name: rpc
+      port: 8400
+      targetPort: 8400
+    - name: serflan-tcp
+      protocol: "TCP"
+      port: 8301
+      targetPort: 8301
+    - name: serflan-udp
+      protocol: "UDP"
+      port: 8301
+      targetPort: 8301
+    - name: serfwan-tcp
+      protocol: "TCP"
+      port: 8302
+      targetPort: 8302
+    - name: serfwan-udp
+      protocol: "UDP"
+      port: 8302
+      targetPort: 8302
+    - name: server
+      port: 8300
+      targetPort: 8300
+    - name: consuldns
+      port: 8600
+      targetPort: 8600
+  selector:
+    consul-master: "2"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: consul
+  labels:
+    name: consul
+spec:
+  ports:
+    - name: http
+      port: 8500
+      targetPort: 8500
+    - name: https
+      port: 8443
+      targetPort: 8443
+    - name: rpc
+      port: 8400
+      targetPort: 8400
+    - name: serflan-tcp
+      protocol: "TCP"
+      port: 8301
+      targetPort: 8301
+    - name: serflan-udp
+      protocol: "UDP"
+      port: 8301
+      targetPort: 8301
+    - name: serfwan-tcp
+      protocol: "TCP"
+      port: 8302
+      targetPort: 8302
+    - name: serfwan-udp
+      protocol: "UDP"
+      port: 8302
+      targetPort: 8302
+    - name: server
+      port: 8300
+      targetPort: 8300
+    - name: consuldns
+      port: 8600
+      targetPort: 8600

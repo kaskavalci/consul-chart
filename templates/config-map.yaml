@@ -1,0 +1,6 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: consul
+data:
+  "consul_server_config.json": '{"leave_on_terminate":true}'
